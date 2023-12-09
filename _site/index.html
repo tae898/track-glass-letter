@@ -1,0 +1,49 @@
+<!-- Your existing content goes here -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Location QR Code</title>
+</head>
+<body>
+    <h1>Scan QR Code to Share Location</h1>
+    <div id="map"></div>
+
+    <script>
+        // Function to get and display the user's location
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Callback function to handle the retrieved location
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Display the location on the map (you can use a mapping library for better visualization)
+            const mapElement = document.getElementById("map");
+            mapElement.innerHTML = `<p>Latitude: ${latitude}</p><p>Longitude: ${longitude}</p>`;
+
+            // Create a URL with the location data
+            const locationURL = `https://your-website.com/upload?lat=${latitude}&lng=${longitude}`;
+
+            // Create a QR code with the location URL
+            const qrCodeElement = document.createElement("img");
+            qrCodeElement.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(locationURL)}&size=150x150`;
+            
+            // Append the QR code to the body
+            document.body.appendChild(qrCodeElement);
+        }
+
+        // Call the getLocation function when the page loads
+        window.onload = getLocation;
+    </script>
+</body>
+</html>
+
