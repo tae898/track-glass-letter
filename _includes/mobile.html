@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Location</title>
+</head>
+<body>
+    <h1>Requesting GPS Location</h1>
+
+    <script>
+        // Function to request and send GPS location
+        function requestLocation() {
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Send the location data to your server
+                    const apiUrl = 'https://tae898.github.io/track-glass-letter/';
+                    const data = { latitude, longitude };
+
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to send location data.');
+                        }
+                        return response.json();
+                    })
+                    .then(responseData => {
+                        // Handle the response if needed
+                        console.log(responseData);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }, function (error) {
+                    console.error('Error getting location:', error);
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        // Call the requestLocation function when the page loads
+        window.onload = requestLocation;
+    </script>
+</body>
+</html>
